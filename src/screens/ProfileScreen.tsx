@@ -38,10 +38,10 @@ export default function ProfileScreen() {
   const todayIndex = (today.getDay() + 6) % 7;
 
   const infoItems = [
-    { icon: 'bulb-outline', label: 'Suggest New Features', chevron: false },
-    { icon: 'star-outline', label: 'Rate App', chevron: false },
-    { icon: 'help-circle-outline', label: 'FAQ', chevron: true },
-    { icon: 'mail-outline', label: 'Contact Support', chevron: false },
+    { icon: 'bulb-outline', label: 'Yeni Özellik Öner', chevron: false },
+    { icon: 'star-outline', label: 'Uygulamayı Puanla', chevron: false },
+    { icon: 'help-circle-outline', label: 'SSS', chevron: true },
+    { icon: 'mail-outline', label: 'Destek ile İletişim', chevron: false },
   ];
 
   return (
@@ -59,7 +59,7 @@ export default function ProfileScreen() {
       >
         <View style={styles.bannerRight}>
           <Text style={styles.bannerCount}>200,000+</Text>
-          <Text style={styles.bannerSubtext}>lives changed</Text>
+          <Text style={styles.bannerSubtext}>hayat değişti</Text>
           <Text style={styles.stars}>★★★★★</Text>
         </View>
         <TouchableOpacity>
@@ -82,11 +82,11 @@ export default function ProfileScreen() {
               {TURKISH_MONTHS[today.getMonth()]}
             </Text>
             <Text style={styles.yearStreakText}>
-              {today.getFullYear()} • 1 days
+              {today.getFullYear()} • 1 gün
             </Text>
           </View>
           <TouchableOpacity style={styles.showMonthBtn}>
-            <Text style={styles.showMonthText}>Show Month</Text>
+            <Text style={styles.showMonthText}>Ayı Göster</Text>
           </TouchableOpacity>
         </View>
 
@@ -94,17 +94,17 @@ export default function ProfileScreen() {
         <View style={styles.legend}>
           <View style={styles.legendItem}>
             <View style={[styles.legendDot, { backgroundColor: Colors.purple }]} />
-            <Text style={styles.legendText}>Affirmations</Text>
+            <Text style={styles.legendText}>Olumlamalar</Text>
           </View>
           <View style={styles.legendItem}>
             <View style={[styles.legendDot, { backgroundColor: Colors.blue }]} />
-            <Text style={styles.legendText}>Journal</Text>
+            <Text style={styles.legendText}>Günlük</Text>
           </View>
         </View>
 
         {/* Weekly tracker */}
         <View style={styles.weekCard}>
-          <Text style={styles.weekLabel}>This Week</Text>
+          <Text style={styles.weekLabel}>Bu Hafta</Text>
           <View style={styles.weekRow}>
             {TURKISH_DAYS.map((day, i) => (
               <Text key={i} style={styles.dayInitial}>{day}</Text>
@@ -138,8 +138,8 @@ export default function ProfileScreen() {
             <Ionicons name="notifications" size={24} color={Colors.blue} />
           </View>
           <View style={styles.notifContent}>
-            <Text style={styles.notifTitle}>Notifications</Text>
-            <Text style={styles.notifSubtitle}>Affirmation reminders on</Text>
+            <Text style={styles.notifTitle}>Bildirimler</Text>
+            <Text style={styles.notifSubtitle}>Olumlama hatırlatıcıları açık</Text>
           </View>
           <View style={styles.notifRight}>
             <Ionicons name="notifications" size={18} color={Colors.green} />
@@ -152,13 +152,13 @@ export default function ProfileScreen() {
       <TouchableOpacity style={styles.card}>
         <View style={styles.updateFocusHeader}>
           <Ionicons name="sparkles" size={18} color={Colors.purple} />
-          <Text style={styles.updateFocusTitle}>Update Focus</Text>
+          <Text style={styles.updateFocusTitle}>Odağı Güncelle</Text>
           <Ionicons name="chevron-forward" size={16} color={Colors.gray} style={{ marginLeft: 'auto' }} />
         </View>
         <View style={styles.divider} />
         <Text style={styles.updateFocusDesc}>
-          Refresh your manifestation goals and journaling prompt whenever life changes.
-          Your next affirmations will reflect it.
+          Hayatın değiştiğinde manifesto hedeflerini ve günlük sorunu yenile.
+          Bir sonraki olumlamaların bunu yansıtacak.
         </Text>
       </TouchableOpacity>
 
@@ -168,12 +168,12 @@ export default function ProfileScreen() {
           <Text style={styles.settingsLabel}>Renk Şeması</Text>
           <View style={styles.settingsRight}>
             <Ionicons name="phone-portrait-outline" size={16} color={Colors.gray} />
-            <Text style={styles.settingsValue}>System</Text>
+            <Text style={styles.settingsValue}>Sistem</Text>
           </View>
         </View>
         <View style={styles.divider} />
         <View style={styles.settingsRow}>
-          <Text style={styles.settingsLabel}>Haptic Feedback</Text>
+          <Text style={styles.settingsLabel}>Dokunsal Geri Bildirim</Text>
           <Switch
             value={hapticOn}
             onValueChange={setHapticOn}

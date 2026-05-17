@@ -179,11 +179,11 @@ export default function AffirmationsScreen() {
           style={styles.filterPill}
           onPress={() => setShowCategory(true)}
         >
-          <Text style={styles.filterPillText}>Category</Text>
+          <Text style={styles.filterPillText}>Kategori</Text>
           <Ionicons name="chevron-expand" size={14} color={Colors.black} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.filterPill}>
-          <Text style={styles.filterPillText}>✦ For You</Text>
+          <Text style={styles.filterPillText}>✦ Senin İçin</Text>
         </TouchableOpacity>
       </View>
 

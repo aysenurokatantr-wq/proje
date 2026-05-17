@@ -20,10 +20,10 @@ type TabItem = {
 };
 
 const tabs: TabItem[] = [
-  { name: 'Affirmations', label: 'Affirmations', icon: 'reader' },
-  { name: 'Journal', label: 'Journal', icon: 'book' },
-  { name: 'Tapes', label: 'Tapes', icon: 'play-circle' },
-  { name: 'Profile', label: 'Profile', icon: 'person-circle' },
+  { name: 'Affirmations', label: 'Olumlamalar', icon: 'reader' },
+  { name: 'Journal', label: 'Günlük', icon: 'book' },
+  { name: 'Tapes', label: 'Kasetler', icon: 'play-circle' },
+  { name: 'Profile', label: 'Profil', icon: 'person-circle' },
 ];
 
 function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {

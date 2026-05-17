@@ -40,8 +40,8 @@ export default function TapesScreen() {
     <View style={[styles.container, { paddingTop: insets.top }]}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.title}>Your Self Love Tape</Text>
-        <Text style={styles.subtitle}>Browse and listen to your affirmations</Text>
+        <Text style={styles.title}>Öz Sevgi Kasedin</Text>
+        <Text style={styles.subtitle}>Olumlamalarına göz at ve dinle</Text>
       </View>
 
       {/* Tabs */}
@@ -56,7 +56,7 @@ export default function TapesScreen() {
             color={activeTab === 'pack' ? Colors.white : Colors.black}
           />
           <Text style={[styles.tabText, activeTab === 'pack' && styles.tabTextActive]}>
-            Pack
+            Paket
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -69,7 +69,7 @@ export default function TapesScreen() {
             color={activeTab === 'favorites' ? Colors.white : Colors.black}
           />
           <Text style={[styles.tabText, activeTab === 'favorites' && styles.tabTextActive]}>
-            Favorites
+            Favoriler
           </Text>
           {favCount > 0 && (
             <View style={[styles.badge, activeTab === 'favorites' && styles.badgeActive]}>
@@ -87,7 +87,7 @@ export default function TapesScreen() {
         onPress={() => setIsPlaying(!isPlaying)}
       >
         <Ionicons name={isPlaying ? 'pause' : 'play'} size={18} color={Colors.white} />
-        <Text style={styles.playAllText}>{isPlaying ? 'Pause' : 'Play All'}</Text>
+        <Text style={styles.playAllText}>{isPlaying ? 'Duraklat' : 'Hepsini Çal'}</Text>
       </TouchableOpacity>
 
       {/* Affirmation list */}
@@ -99,9 +99,9 @@ export default function TapesScreen() {
         {displayList.length === 0 ? (
           <View style={styles.emptyState}>
             <Ionicons name="heart-outline" size={40} color={Colors.grayMid} />
-            <Text style={styles.emptyText}>No favorites yet</Text>
+            <Text style={styles.emptyText}>Henüz favori yok</Text>
             <Text style={styles.emptyHint}>
-              Tap the heart icon on affirmation cards to save them here.
+              Burada saklamak için olumlama kartlarındaki kalp simgesine dokun.
             </Text>
           </View>
         ) : (

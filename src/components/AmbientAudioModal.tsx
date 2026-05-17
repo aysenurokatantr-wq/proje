@@ -25,7 +25,7 @@ export default function AmbientAudioModal({ visible, onClose }: Props) {
       <TouchableOpacity style={styles.backdrop} activeOpacity={1} onPress={onClose} />
       <View style={styles.card}>
         <View style={styles.header}>
-          <Text style={styles.title}>Ambient Audio</Text>
+          <Text style={styles.title}>Ortam Sesi</Text>
           <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
             <Ionicons name="close" size={18} color={Colors.gray} />
           </TouchableOpacity>
@@ -33,7 +33,7 @@ export default function AmbientAudioModal({ visible, onClose }: Props) {
 
         {/* Ambient toggle */}
         <View style={styles.row}>
-          <Text style={styles.rowLabel}>Ambient background</Text>
+          <Text style={styles.rowLabel}>Ortam arka planı</Text>
           <Switch
             value={ambientOn}
             onValueChange={setAmbientOn}
@@ -66,7 +66,7 @@ export default function AmbientAudioModal({ visible, onClose }: Props) {
 
         {/* Autopilot Pause */}
         <View style={styles.sectionRow}>
-          <Text style={styles.rowLabel}>Autopilot Pause</Text>
+          <Text style={styles.rowLabel}>Otomatik Duraklama</Text>
           <Text style={styles.valueText}>3s</Text>
         </View>
         <View style={styles.sliderRow}>
@@ -82,7 +82,7 @@ export default function AmbientAudioModal({ visible, onClose }: Props) {
         <View style={styles.divider} />
 
         {/* Voice Speed */}
-        <Text style={styles.sectionLabel}>Voice Speed</Text>
+        <Text style={styles.sectionLabel}>Ses Hızı</Text>
         <View style={styles.speedRow}>
           {(['1x', '1.5x', '2x'] as const).map((s) => (
             <TouchableOpacity
@@ -101,7 +101,7 @@ export default function AmbientAudioModal({ visible, onClose }: Props) {
 
         {/* Loop Autopilot */}
         <View style={styles.row}>
-          <Text style={[styles.rowLabel, styles.disabledText]}>Loop Autopilot...</Text>
+          <Text style={[styles.rowLabel, styles.disabledText]}>Otomatik Döngü...</Text>
           <View style={styles.rowRight}>
             <Switch
               value={false}
@@ -120,13 +120,13 @@ export default function AmbientAudioModal({ visible, onClose }: Props) {
 
         {/* Background Music */}
         <View style={styles.row}>
-          <Text style={styles.rowLabel}>Background Music</Text>
+          <Text style={styles.rowLabel}>Arka Plan Müziği</Text>
         </View>
 
         {/* Done */}
         <TouchableOpacity style={styles.doneBtn} onPress={onClose}>
           <Ionicons name="checkmark-circle" size={20} color={Colors.primary} />
-          <Text style={styles.doneBtnText}>Done</Text>
+          <Text style={styles.doneBtnText}>Tamam</Text>
         </TouchableOpacity>
       </View>
     </Modal>

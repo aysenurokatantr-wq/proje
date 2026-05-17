@@ -18,17 +18,17 @@ const features = [
   {
     icon: 'sparkles' as const,
     lib: 'Ionicons' as const,
-    text: 'Tailored reflections for every day',
+    text: 'Her güne özel yansımalar',
   },
   {
     icon: 'sync-circle' as const,
     lib: 'Ionicons' as const,
-    text: 'Syncs with your cycles',
+    text: 'Döngülerinle senkronize',
   },
   {
     icon: 'brain' as const,
     lib: 'MaterialCommunityIcons' as const,
-    text: 'Guides you into deeper awareness',
+    text: 'Seni daha derin farkındalığa yönlendirir',
   },
 ];
 
@@ -48,10 +48,10 @@ export default function PremiumModal({ visible, onClose }: Props) {
             style={styles.icon}
           />
 
-          <Text style={styles.title}>Unlock Personalized Prompts</Text>
+          <Text style={styles.title}>Kişiselleştirilmiş Soruların Kilidini Aç</Text>
           <Text style={styles.description}>
-            Get journal prompts that evolve with your manifestation journey—perfectly
-            aligned with your affirmations.
+            Manifesto yolculuğunla birlikte gelişen, olumlamalarınla mükemmel uyum
+            içinde günlük soruları al.
           </Text>
 
           {features.map((f, i) => (
@@ -71,7 +71,7 @@ export default function PremiumModal({ visible, onClose }: Props) {
 
           <TouchableOpacity style={styles.ctaBtn} onPress={onClose}>
             <MaterialCommunityIcons name="crown" size={20} color={Colors.purple} />
-            <Text style={styles.ctaBtnText}>Try Personalized Prompts</Text>
+            <Text style={styles.ctaBtnText}>Kişiselleştirilmiş Soruları Dene</Text>
           </TouchableOpacity>
         </View>
       </View>

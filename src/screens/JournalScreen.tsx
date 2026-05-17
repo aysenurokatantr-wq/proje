@@ -79,7 +79,7 @@ export default function JournalScreen() {
           style={styles.premiumPill}
           onPress={() => setShowPremium(true)}
         >
-          <Text style={styles.premiumPillText}>Get personalized prompts</Text>
+          <Text style={styles.premiumPillText}>Kişiselleştirilmiş sorular al</Text>
         </TouchableOpacity>
 
         {/* Today's Reflection card */}
@@ -87,7 +87,7 @@ export default function JournalScreen() {
           {/* Date header */}
           <View style={styles.reflectionHeader}>
             <View style={styles.blueDot} />
-            <Text style={styles.sectionLabel}>TODAY'S REFLECTION</Text>
+            <Text style={styles.sectionLabel}>BUGÜNÜN YANSIMASI</Text>
           </View>
           <Text style={styles.dateText}>{formatDate(today)}</Text>
 
@@ -103,7 +103,7 @@ export default function JournalScreen() {
               onPress={() => setActiveChip('foryou')}
             >
               <Text style={[styles.chipText, activeChip === 'foryou' && styles.chipTextActive]}>
-                ✦ For You
+                ✦ Senin İçin
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -111,7 +111,7 @@ export default function JournalScreen() {
               onPress={() => setActiveChip('shadow')}
             >
               <Text style={[styles.chipText, activeChip === 'shadow' && styles.chipTextActive]}>
-                🌙 Shadow Work
+                🌙 Gölge Çalışması
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={spinRefresh} style={styles.refreshBtn}>
@@ -129,11 +129,11 @@ export default function JournalScreen() {
         <View style={styles.actionRow}>
           <TouchableOpacity style={styles.actionCard}>
             <Ionicons name="volume-medium-outline" size={20} color={Colors.blue} />
-            <Text style={styles.actionCardText}>Hear{'\n'}Today's</Text>
+            <Text style={styles.actionCardText}>Bugünkü{'\n'}Dinle</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionCard}>
             <Ionicons name="book-outline" size={20} color={Colors.teal} />
-            <Text style={styles.actionCardText}>View Past{'\n'}Entries</Text>
+            <Text style={styles.actionCardText}>Geçmiş{'\n'}Kayıtlar</Text>
           </TouchableOpacity>
         </View>
 
@@ -141,7 +141,7 @@ export default function JournalScreen() {
         <View style={styles.reflectionCard}>
           <View style={styles.reflectionCardHeader}>
             <View style={styles.reflectionDot} />
-            <Text style={styles.sectionLabel}>YOUR REFLECTION</Text>
+            <Text style={styles.sectionLabel}>YANSIMAN</Text>
             <TouchableOpacity style={styles.micBtn}>
               <Ionicons name="mic-outline" size={22} color={Colors.gray} />
             </TouchableOpacity>
@@ -151,12 +151,12 @@ export default function JournalScreen() {
             multiline
             value={reflection}
             onChangeText={saveReflection}
-            placeholder="Begin writing..."
+            placeholder="Yazmaya başla..."
             placeholderTextColor={Colors.gray}
             textAlignVertical="top"
           />
           {!reflection && (
-            <Text style={styles.hint}>Let your thoughts flow freely. This space is yours.</Text>
+            <Text style={styles.hint}>Düşüncelerin özgürce aksın. Bu alan senin.</Text>
           )}
         </View>
       </ScrollView>

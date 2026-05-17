@@ -37,9 +37,9 @@ export default function CategorySheet({ visible, selectedId, onSelect, onClose }
       <View style={styles.sheet}>
         <View style={styles.handle} />
         <View style={styles.header}>
-          <Text style={styles.title}>Choose your vibe</Text>
+          <Text style={styles.title}>Ruh halini seç</Text>
           <TouchableOpacity onPress={onClose}>
-            <Text style={styles.seeAll}>See all</Text>
+            <Text style={styles.seeAll}>Tümünü gör</Text>
           </TouchableOpacity>
         </View>
         <FlatList
@@ -72,7 +72,7 @@ export default function CategorySheet({ visible, selectedId, onSelect, onClose }
                     {item.name}
                   </Text>
                   {item.premium && (
-                    <Text style={styles.premiumText}>Requires Premium</Text>
+                    <Text style={styles.premiumText}>Premium Gerekli</Text>
                   )}
                 </View>
                 {item.premium ? (
