@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors, Radius, Spacing } from '../theme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   areNotificationsEnabled,
   cancelDailyAffirmation,
@@ -41,12 +42,16 @@ export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const [hapticOn, setHapticOn] = useState(true);
   const [notifsOn, setNotifsOn] = useState(false);
+  const [userName, setUserName] = useState('Sen');
   const today = new Date();
   const weekDays = getWeekDays();
   const todayIndex = (today.getDay() + 6) % 7;
 
   useEffect(() => {
     areNotificationsEnabled().then(setNotifsOn);
+    AsyncStorage.getItem('user_name').then((val) => {
+      if (val) setUserName(val);
+    });
   }, []);
 
   const toggleNotifications = async () => {
@@ -249,7 +254,7 @@ export default function ProfileScreen() {
         </View>
         <View>
           <Text style={styles.profileFieldLabel}>İsim</Text>
-          <Text style={styles.profileName}>Ayşenur</Text>
+          <Text style={styles.profileName}>{userName}</Text>
         </View>
       </View>
     </ScrollView>

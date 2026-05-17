@@ -29,6 +29,15 @@ export default function AffirmationsScreen() {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showCategory, setShowCategory] = useState(false);
 
+  useEffect(() => {
+    AsyncStorage.getItem('user_focus').then((focusId) => {
+      if (focusId) {
+        const found = categories.find((c) => c.id === focusId && !c.premium);
+        if (found) setSelectedCategory(found);
+      }
+    });
+  }, []);
+
   const pan = useRef(new Animated.ValueXY()).current;
   const nextCardScale = useRef(new Animated.Value(0.95)).current;
   const nextCardRotate = useRef(new Animated.Value(-6)).current;
