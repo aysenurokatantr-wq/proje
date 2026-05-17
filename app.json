@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "Affirmations",
+    "slug": "affirmations-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#EDE8F5"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.affirmations.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#EDE8F5"
+      },
+      "package": "com.affirmations.app"
+    }
+  }
+}
