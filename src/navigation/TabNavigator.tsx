@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 
 import AffirmationsScreen from '../screens/AffirmationsScreen';
-import JournalScreen from '../screens/JournalScreen';
+import JournalStack from './JournalStack';
 import TapesScreen from '../screens/TapesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import { Colors, Radius } from '../theme';
@@ -76,7 +76,7 @@ export default function TabNavigator() {
       screenOptions={{ headerShown: false }}
     >
       <Tab.Screen name="Affirmations" component={AffirmationsScreen} />
-      <Tab.Screen name="Journal" component={JournalScreen} />
+      <Tab.Screen name="Journal" component={JournalStack} />
       <Tab.Screen name="Tapes" component={TapesScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>

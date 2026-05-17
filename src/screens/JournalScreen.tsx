@@ -10,6 +10,8 @@ import {
   Easing,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors, Radius, Spacing } from '../theme';
@@ -33,6 +35,7 @@ function formatDate(d: Date) {
 
 export default function JournalScreen() {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [showPremium, setShowPremium] = useState(false);
   const [promptIndex, setPromptIndex] = useState(0);
   const [activeChip, setActiveChip] = useState<'foryou' | 'shadow'>('foryou');
@@ -135,7 +138,10 @@ export default function JournalScreen() {
             <Ionicons name="volume-medium-outline" size={20} color={Colors.blue} />
             <Text style={styles.actionCardText}>Bugünkü{'\n'}Dinle</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionCard}>
+          <TouchableOpacity
+            style={styles.actionCard}
+            onPress={() => navigation.navigate('JournalHistory')}
+          >
             <Ionicons name="book-outline" size={20} color={Colors.teal} />
             <Text style={styles.actionCardText}>Geçmiş{'\n'}Kayıtlar</Text>
           </TouchableOpacity>
