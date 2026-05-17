@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors, Radius, Spacing } from '../theme';
 import { categories } from '../data/affirmations';
 import AmbientAudioModal from '../components/AmbientAudioModal';
+import { speak, stop as stopSpeech } from '../utils/speech';
 
 const selfLoveAffirmations = categories[0].affirmations;
 
@@ -27,6 +28,7 @@ export default function TapesScreen() {
     AsyncStorage.getItem('favorites').then((val) => {
       if (val) setFavorites(JSON.parse(val));
     });
+    return () => stopSpeech();
   }, []);
 
   const displayList =
@@ -35,6 +37,22 @@ export default function TapesScreen() {
       : selfLoveAffirmations;
 
   const favCount = selfLoveAffirmations.filter((a) => favorites.includes(a)).length;
+
+  const handlePlayToggle = () => {
+    if (isPlaying) {
+      stopSpeech();
+      setIsPlaying(false);
+    } else if (displayList.length > 0) {
+      speak(displayList[currentIndex] ?? displayList[0]);
+      setIsPlaying(true);
+    }
+  };
+
+  const handleCardTap = (index: number) => {
+    setCurrentIndex(index);
+    setIsPlaying(true);
+    speak(displayList[index]);
+  };
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -82,10 +100,7 @@ export default function TapesScreen() {
       </View>
 
       {/* Play All */}
-      <TouchableOpacity
-        style={styles.playAllBtn}
-        onPress={() => setIsPlaying(!isPlaying)}
-      >
+      <TouchableOpacity style={styles.playAllBtn} onPress={handlePlayToggle}>
         <Ionicons name={isPlaying ? 'pause' : 'play'} size={18} color={Colors.white} />
         <Text style={styles.playAllText}>{isPlaying ? 'Duraklat' : 'Hepsini Çal'}</Text>
       </TouchableOpacity>
@@ -112,10 +127,7 @@ export default function TapesScreen() {
                 styles.affirmationCard,
                 isPlaying && currentIndex === index && styles.affirmationCardActive,
               ]}
-              onPress={() => {
-                setCurrentIndex(index);
-                setIsPlaying(true);
-              }}
+              onPress={() => handleCardTap(index)}
             >
               <Text style={styles.affirmationText}>{affirmation}</Text>
               {isPlaying && currentIndex === index && (
@@ -137,7 +149,7 @@ export default function TapesScreen() {
           <Text style={styles.miniPlayerText} numberOfLines={1}>
             {displayList[currentIndex] || selfLoveAffirmations[0]}
           </Text>
-          <TouchableOpacity onPress={() => setIsPlaying(false)}>
+          <TouchableOpacity onPress={() => { stopSpeech(); setIsPlaying(false); }}>
             <Ionicons name="pause-circle" size={28} color={Colors.primary} />
           </TouchableOpacity>
         </View>

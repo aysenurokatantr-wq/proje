@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors, Radius, Spacing } from '../theme';
 import { journalPrompts } from '../data/affirmations';
 import PremiumModal from '../components/PremiumModal';
+import { speak } from '../utils/speech';
 
 const TURKISH_MONTHS = [
   'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
@@ -127,7 +128,10 @@ export default function JournalScreen() {
 
         {/* Action row */}
         <View style={styles.actionRow}>
-          <TouchableOpacity style={styles.actionCard}>
+          <TouchableOpacity
+            style={styles.actionCard}
+            onPress={() => speak(journalPrompts[promptIndex])}
+          >
             <Ionicons name="volume-medium-outline" size={20} color={Colors.blue} />
             <Text style={styles.actionCardText}>Bugünkü{'\n'}Dinle</Text>
           </TouchableOpacity>

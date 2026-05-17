@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors, Radius, Spacing } from '../theme';
 import { categories, Category } from '../data/affirmations';
 import CategorySheet from '../components/CategorySheet';
+import { toggle as toggleSpeech, stop as stopSpeech } from '../utils/speech';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const CARD_WIDTH = SCREEN_WIDTH - 48;
@@ -65,6 +66,7 @@ export default function AffirmationsScreen() {
       pan.setValue({ x: 0, y: 0 });
       nextCardScale.setValue(0.95);
       nextCardRotate.setValue(-6);
+      stopSpeech();
       setCardIndex((i) => i + 1);
     });
   };
@@ -162,7 +164,10 @@ export default function AffirmationsScreen() {
             color={isFav ? Colors.primary : Colors.grayDark}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionBtn}>
+        <TouchableOpacity
+          style={styles.actionBtn}
+          onPress={() => toggleSpeech(currentAffirmation)}
+        >
           <Ionicons name="volume-medium-outline" size={24} color={Colors.grayDark} />
         </TouchableOpacity>
         <TouchableOpacity
