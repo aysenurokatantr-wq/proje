@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,11 +6,18 @@ import {
   ScrollView,
   TouchableOpacity,
   Switch,
+  Alert,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors, Radius, Spacing } from '../theme';
+import {
+  areNotificationsEnabled,
+  cancelDailyAffirmation,
+  requestPermissions,
+  scheduleDailyAffirmation,
+} from '../utils/notifications';
 
 const TURKISH_MONTHS = [
   'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
@@ -33,9 +40,33 @@ function getWeekDays() {
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const [hapticOn, setHapticOn] = useState(true);
+  const [notifsOn, setNotifsOn] = useState(false);
   const today = new Date();
   const weekDays = getWeekDays();
   const todayIndex = (today.getDay() + 6) % 7;
+
+  useEffect(() => {
+    areNotificationsEnabled().then(setNotifsOn);
+  }, []);
+
+  const toggleNotifications = async () => {
+    if (notifsOn) {
+      await cancelDailyAffirmation();
+      setNotifsOn(false);
+      return;
+    }
+    const granted = await requestPermissions();
+    if (!granted) {
+      Alert.alert(
+        'Bildirim izni gerekli',
+        'Günlük olumlama hatırlatıcıları için bildirimlere izin vermelisin.'
+      );
+      return;
+    }
+    await scheduleDailyAffirmation(9, 0);
+    setNotifsOn(true);
+    Alert.alert('Bildirimler açıldı', 'Her gün saat 09:00\'da olumlama hatırlatıcısı alacaksın.');
+  };
 
   const infoItems = [
     { icon: 'bulb-outline', label: 'Yeni Özellik Öner', chevron: false },
@@ -132,17 +163,23 @@ export default function ProfileScreen() {
       </View>
 
       {/* Notifications */}
-      <TouchableOpacity style={styles.card}>
+      <TouchableOpacity style={styles.card} onPress={toggleNotifications}>
         <View style={styles.notifRow}>
           <View style={styles.notifIconWrap}>
             <Ionicons name="notifications" size={24} color={Colors.blue} />
           </View>
           <View style={styles.notifContent}>
             <Text style={styles.notifTitle}>Bildirimler</Text>
-            <Text style={styles.notifSubtitle}>Olumlama hatırlatıcıları açık</Text>
+            <Text style={styles.notifSubtitle}>
+              {notifsOn ? 'Olumlama hatırlatıcıları açık' : 'Hatırlatıcıları açmak için dokun'}
+            </Text>
           </View>
           <View style={styles.notifRight}>
-            <Ionicons name="notifications" size={18} color={Colors.green} />
+            <Ionicons
+              name={notifsOn ? 'notifications' : 'notifications-off-outline'}
+              size={18}
+              color={notifsOn ? Colors.green : Colors.gray}
+            />
             <Ionicons name="chevron-forward" size={16} color={Colors.gray} />
           </View>
         </View>
