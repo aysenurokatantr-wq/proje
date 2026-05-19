@@ -4,11 +4,10 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
   Switch,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors, Radius, Spacing } from '../theme';
+import { makeStyles, useTheme, Radius, Spacing } from '../theme';
 
 type Props = {
   visible: boolean;
@@ -16,6 +15,8 @@ type Props = {
 };
 
 export default function AmbientAudioModal({ visible, onClose }: Props) {
+  const styles = useStyles();
+  const { colors } = useTheme();
   const [ambientOn, setAmbientOn] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
   const [speed, setSpeed] = useState<'1x' | '1.5x' | '2x'>('1x');
@@ -27,7 +28,7 @@ export default function AmbientAudioModal({ visible, onClose }: Props) {
         <View style={styles.header}>
           <Text style={styles.title}>Ortam Sesi</Text>
           <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
-            <Ionicons name="close" size={18} color={Colors.gray} />
+            <Ionicons name="close" size={18} color={colors.gray} />
           </TouchableOpacity>
         </View>
 
@@ -37,15 +38,15 @@ export default function AmbientAudioModal({ visible, onClose }: Props) {
           <Switch
             value={ambientOn}
             onValueChange={setAmbientOn}
-            trackColor={{ false: Colors.grayMid, true: Colors.primary }}
-            thumbColor={Colors.white}
+            trackColor={{ false: colors.grayMid, true: colors.primary }}
+            thumbColor={colors.white}
           />
         </View>
 
         {/* Playback controls */}
         <View style={styles.controls}>
           <TouchableOpacity style={styles.sideBtn}>
-            <Ionicons name="play-skip-back" size={24} color={Colors.black} />
+            <Ionicons name="play-skip-back" size={24} color={colors.black} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.playBtn}
@@ -54,11 +55,11 @@ export default function AmbientAudioModal({ visible, onClose }: Props) {
             <Ionicons
               name={isPlaying ? 'pause' : 'play'}
               size={32}
-              color={Colors.white}
+              color="#FFFFFF"
             />
           </TouchableOpacity>
           <TouchableOpacity style={styles.sideBtn}>
-            <Ionicons name="play-skip-forward" size={24} color={Colors.black} />
+            <Ionicons name="play-skip-forward" size={24} color={colors.black} />
           </TouchableOpacity>
         </View>
 
@@ -74,7 +75,7 @@ export default function AmbientAudioModal({ visible, onClose }: Props) {
             <View style={styles.sliderFill} />
           </View>
           <View style={styles.premiumBadge}>
-            <Ionicons name="lock-closed" size={12} color={Colors.white} />
+            <Ionicons name="lock-closed" size={12} color="#FFFFFF" />
             <Text style={styles.premiumBadgeText}>Premium</Text>
           </View>
         </View>
@@ -106,11 +107,11 @@ export default function AmbientAudioModal({ visible, onClose }: Props) {
             <Switch
               value={false}
               disabled
-              trackColor={{ false: Colors.grayMid, true: Colors.primary }}
-              thumbColor={Colors.white}
+              trackColor={{ false: colors.grayMid, true: colors.primary }}
+              thumbColor={colors.white}
             />
             <View style={styles.premiumBadgeInline}>
-              <Ionicons name="lock-closed" size={11} color={Colors.purple} />
+              <Ionicons name="lock-closed" size={11} color={colors.purple} />
               <Text style={styles.premiumBadgeInlineText}>Premium</Text>
             </View>
           </View>
@@ -125,7 +126,7 @@ export default function AmbientAudioModal({ visible, onClose }: Props) {
 
         {/* Done */}
         <TouchableOpacity style={styles.doneBtn} onPress={onClose}>
-          <Ionicons name="checkmark-circle" size={20} color={Colors.primary} />
+          <Ionicons name="checkmark-circle" size={20} color={colors.primary} />
           <Text style={styles.doneBtnText}>Tamam</Text>
         </TouchableOpacity>
       </View>
@@ -133,13 +134,13 @@ export default function AmbientAudioModal({ visible, onClose }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles((colors) => ({
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.25)',
   },
   card: {
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
     marginHorizontal: 16,
     marginBottom: 24,
     borderRadius: Radius.xl,
@@ -161,13 +162,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: Colors.black,
+    color: colors.black,
   },
   closeBtn: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: Colors.grayLight,
+    backgroundColor: colors.grayLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -185,10 +186,10 @@ const styles = StyleSheet.create({
   rowLabel: {
     fontSize: 16,
     fontWeight: '500',
-    color: Colors.black,
+    color: colors.black,
   },
   disabledText: {
-    color: Colors.gray,
+    color: colors.gray,
   },
   controls: {
     flexDirection: 'row',
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 48,
     borderRadius: Radius.md,
-    backgroundColor: Colors.grayLight,
+    backgroundColor: colors.grayLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -209,10 +210,10 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: Colors.primary,
+    backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: Colors.primary,
+    shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
     shadowRadius: 8,
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: Colors.grayMid,
+    backgroundColor: colors.grayMid,
     marginVertical: 4,
   },
   sectionRow: {
@@ -231,7 +232,7 @@ const styles = StyleSheet.create({
   },
   valueText: {
     fontSize: 16,
-    color: Colors.grayDark,
+    color: colors.grayDark,
   },
   sliderRow: {
     flexDirection: 'row',
@@ -241,34 +242,34 @@ const styles = StyleSheet.create({
   sliderTrack: {
     flex: 1,
     height: 6,
-    backgroundColor: Colors.grayMid,
+    backgroundColor: colors.grayMid,
     borderRadius: 3,
     overflow: 'hidden',
   },
   sliderFill: {
     width: '30%',
     height: '100%',
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: colors.primaryLight,
     borderRadius: 3,
   },
   premiumBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.purple,
+    backgroundColor: colors.purple,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: Radius.full,
     gap: 4,
   },
   premiumBadgeText: {
-    color: Colors.white,
+    color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '600',
   },
   sectionLabel: {
     fontSize: 16,
     fontWeight: '500',
-    color: Colors.black,
+    color: colors.black,
     paddingTop: 10,
     paddingBottom: 8,
   },
@@ -281,26 +282,26 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     borderRadius: Radius.md,
-    backgroundColor: Colors.grayLight,
+    backgroundColor: colors.grayLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
   speedBtnActive: {
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: colors.primaryLight,
   },
   speedText: {
     fontSize: 15,
     fontWeight: '600',
-    color: Colors.grayDark,
+    color: colors.grayDark,
   },
   speedTextActive: {
-    color: Colors.primary,
+    color: colors.primary,
   },
   premiumBadgeInline: {
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1.5,
-    borderColor: Colors.purple,
+    borderColor: colors.purple,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: Radius.full,
@@ -308,14 +309,14 @@ const styles = StyleSheet.create({
   },
   premiumBadgeInlineText: {
     fontSize: 12,
-    color: Colors.purple,
+    color: colors.purple,
     fontWeight: '600',
   },
   doneBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: colors.primaryLight,
     borderRadius: Radius.full,
     paddingVertical: 14,
     gap: 8,
@@ -324,6 +325,6 @@ const styles = StyleSheet.create({
   doneBtnText: {
     fontSize: 17,
     fontWeight: '600',
-    color: Colors.primary,
+    color: colors.primary,
   },
-});
+}));

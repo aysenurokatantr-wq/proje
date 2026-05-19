@@ -4,10 +4,9 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Colors, Radius, Spacing } from '../theme';
+import { makeStyles, useTheme, Radius, Spacing } from '../theme';
 
 type Props = {
   visible: boolean;
@@ -33,18 +32,21 @@ const features = [
 ];
 
 export default function PremiumModal({ visible, onClose }: Props) {
+  const styles = useStyles();
+  const { colors } = useTheme();
+
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <View style={styles.backdrop}>
         <View style={styles.card}>
           <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
-            <Ionicons name="close" size={18} color={Colors.grayDark} />
+            <Ionicons name="close" size={18} color={colors.grayDark} />
           </TouchableOpacity>
 
           <Ionicons
             name="documents"
             size={56}
-            color={Colors.black}
+            color={colors.black}
             style={styles.icon}
           />
 
@@ -60,17 +62,17 @@ export default function PremiumModal({ visible, onClose }: Props) {
                 <MaterialCommunityIcons
                   name={f.icon as any}
                   size={24}
-                  color={Colors.purple}
+                  color={colors.purple}
                 />
               ) : (
-                <Ionicons name={f.icon as any} size={24} color={Colors.purple} />
+                <Ionicons name={f.icon as any} size={24} color={colors.purple} />
               )}
               <Text style={styles.featureText}>{f.text}</Text>
             </View>
           ))}
 
           <TouchableOpacity style={styles.ctaBtn} onPress={onClose}>
-            <MaterialCommunityIcons name="crown" size={20} color={Colors.purple} />
+            <MaterialCommunityIcons name="crown" size={20} color={colors.purple} />
             <Text style={styles.ctaBtnText}>Kişiselleştirilmiş Soruları Dene</Text>
           </TouchableOpacity>
         </View>
@@ -79,7 +81,7 @@ export default function PremiumModal({ visible, onClose }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles((colors) => ({
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.35)',
@@ -87,7 +89,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
   },
   card: {
-    backgroundColor: Colors.grayLight,
+    backgroundColor: colors.grayLight,
     borderRadius: Radius.xl,
     padding: Spacing.xl,
     alignItems: 'center',
@@ -99,7 +101,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: Colors.grayMid,
+    backgroundColor: colors.grayMid,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -110,13 +112,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '800',
-    color: Colors.black,
+    color: colors.black,
     textAlign: 'center',
     marginBottom: Spacing.sm,
   },
   description: {
     fontSize: 15,
-    color: Colors.grayDark,
+    color: colors.grayDark,
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: Spacing.lg,
@@ -131,14 +133,14 @@ const styles = StyleSheet.create({
   featureText: {
     fontSize: 16,
     fontWeight: '600',
-    color: Colors.black,
+    color: colors.black,
     flex: 1,
   },
   ctaBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.purpleLight,
+    backgroundColor: colors.purpleLight,
     borderRadius: Radius.full,
     paddingVertical: 16,
     paddingHorizontal: Spacing.xl,
@@ -149,6 +151,6 @@ const styles = StyleSheet.create({
   ctaBtnText: {
     fontSize: 17,
     fontWeight: '700',
-    color: Colors.purple,
+    color: colors.purple,
   },
-});
+}));

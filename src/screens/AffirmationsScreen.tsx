@@ -12,7 +12,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Colors, Radius, Spacing } from '../theme';
+import { makeStyles, useTheme, Radius, Spacing } from '../theme';
 import { categories, Category } from '../data/affirmations';
 import CategorySheet from '../components/CategorySheet';
 import { toggle as toggleSpeech, stop as stopSpeech } from '../utils/speech';
@@ -23,6 +23,8 @@ const CARD_HEIGHT = SCREEN_HEIGHT * 0.52;
 const SWIPE_THRESHOLD = 120;
 
 export default function AffirmationsScreen() {
+  const styles = useStyles();
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const [selectedCategory, setSelectedCategory] = useState<Category>(categories[0]);
   const [cardIndex, setCardIndex] = useState(0);
@@ -122,7 +124,7 @@ export default function AffirmationsScreen() {
       <View style={styles.categoryHeader}>
         <View style={styles.categoryHeaderPill}>
           <View style={styles.heartCircle}>
-            <Ionicons name="heart" size={14} color={Colors.primary} />
+            <Ionicons name="heart" size={14} color={colors.primary} />
           </View>
           <Text style={styles.categoryHeaderText}>{selectedCategory.name}</Text>
         </View>
@@ -170,20 +172,20 @@ export default function AffirmationsScreen() {
           <Ionicons
             name={isFav ? 'heart' : 'heart-outline'}
             size={24}
-            color={isFav ? Colors.primary : Colors.grayDark}
+            color={isFav ? colors.primary : colors.grayDark}
           />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.actionBtn}
           onPress={() => toggleSpeech(currentAffirmation)}
         >
-          <Ionicons name="volume-medium-outline" size={24} color={Colors.grayDark} />
+          <Ionicons name="volume-medium-outline" size={24} color={colors.grayDark} />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.actionBtn}
           onPress={() => Share.share({ message: currentAffirmation })}
         >
-          <Ionicons name="share-outline" size={24} color={Colors.grayDark} />
+          <Ionicons name="share-outline" size={24} color={colors.grayDark} />
         </TouchableOpacity>
       </View>
 
@@ -194,7 +196,7 @@ export default function AffirmationsScreen() {
           onPress={() => setShowCategory(true)}
         >
           <Text style={styles.filterPillText}>Kategori</Text>
-          <Ionicons name="chevron-expand" size={14} color={Colors.black} />
+          <Ionicons name="chevron-expand" size={14} color={colors.black} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.filterPill}>
           <Text style={styles.filterPillText}>✦ Senin İçin</Text>
@@ -215,10 +217,10 @@ export default function AffirmationsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles((colors) => ({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
     alignItems: 'center',
   },
   categoryHeader: {
@@ -234,14 +236,14 @@ const styles = StyleSheet.create({
     height: 28,
     borderRadius: 14,
     borderWidth: 2,
-    borderColor: Colors.primary,
+    borderColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
   categoryHeaderText: {
     fontSize: 16,
     fontWeight: '600',
-    color: Colors.black,
+    color: colors.black,
   },
   cardArea: {
     width: CARD_WIDTH,
@@ -255,12 +257,12 @@ const styles = StyleSheet.create({
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
     borderRadius: Radius.xl,
-    backgroundColor: Colors.cardPink,
+    backgroundColor: colors.cardPink,
     justifyContent: 'center',
     alignItems: 'center',
     padding: Spacing.xl,
     position: 'absolute',
-    shadowColor: Colors.cardPinkDark,
+    shadowColor: colors.cardPinkDark,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
     shadowRadius: 16,
@@ -272,7 +274,7 @@ const styles = StyleSheet.create({
   cardText: {
     fontFamily: 'Georgia',
     fontSize: 34,
-    color: Colors.black,
+    color: colors.black,
     textAlign: 'center',
     lineHeight: 46,
   },
@@ -285,7 +287,7 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: Colors.grayLight,
+    backgroundColor: colors.grayLight,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
@@ -306,7 +308,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
     paddingHorizontal: Spacing.md,
     paddingVertical: 10,
     borderRadius: Radius.full,
@@ -319,6 +321,6 @@ const styles = StyleSheet.create({
   filterPillText: {
     fontSize: 14,
     fontWeight: '600',
-    color: Colors.black,
+    color: colors.black,
   },
-});
+}));

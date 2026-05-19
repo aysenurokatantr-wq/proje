@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
@@ -9,7 +9,7 @@ import AffirmationsScreen from '../screens/AffirmationsScreen';
 import JournalStack from './JournalStack';
 import TapesScreen from '../screens/TapesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import { Colors, Radius } from '../theme';
+import { makeStyles, useTheme, Radius } from '../theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,12 +27,13 @@ const tabs: TabItem[] = [
 ];
 
 function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+  const styles = useStyles();
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
   return (
     <View style={[styles.tabBar, { paddingBottom: insets.bottom || 12 }]}>
       {state.routes.map((route, index) => {
-        const { options } = descriptors[route.key];
         const tab = tabs[index];
         const isFocused = state.index === index;
 
@@ -57,7 +58,7 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             <Ionicons
               name={tab.icon as any}
               size={22}
-              color={isFocused ? Colors.purple : Colors.grayDark}
+              color={isFocused ? colors.purple : colors.grayDark}
             />
             <Text style={[styles.tabLabel, isFocused && styles.tabLabelActive]}>
               {tab.label}
@@ -83,10 +84,10 @@ export default function TabNavigator() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles((colors) => ({
   tabBar: {
     flexDirection: 'row',
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
     borderTopLeftRadius: Radius.xl,
     borderTopRightRadius: Radius.xl,
     paddingTop: 10,
@@ -105,14 +106,14 @@ const styles = StyleSheet.create({
     borderRadius: Radius.lg,
   },
   tabItemActive: {
-    backgroundColor: Colors.purplePale,
+    backgroundColor: colors.purplePale,
   },
   tabLabel: {
     fontSize: 11,
     fontWeight: '600',
-    color: Colors.grayDark,
+    color: colors.grayDark,
   },
   tabLabelActive: {
-    color: Colors.purple,
+    color: colors.purple,
   },
-});
+}));

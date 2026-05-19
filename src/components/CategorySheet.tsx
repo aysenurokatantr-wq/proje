@@ -4,11 +4,10 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
   FlatList,
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
-import { Colors, Radius, Spacing } from '../theme';
+import { makeStyles, useTheme, Radius, Spacing } from '../theme';
 import { categories, Category } from '../data/affirmations';
 
 type Props = {
@@ -19,9 +18,12 @@ type Props = {
 };
 
 export default function CategorySheet({ visible, selectedId, onSelect, onClose }: Props) {
+  const styles = useStyles();
+  const { colors } = useTheme();
+
   const renderIcon = (cat: Category) => {
     const size = 22;
-    const color = cat.premium ? Colors.gray : cat.color;
+    const color = cat.premium ? colors.gray : cat.color;
     if (cat.iconLib === 'MaterialCommunityIcons') {
       return <MaterialCommunityIcons name={cat.icon as any} size={size} color={color} />;
     }
@@ -61,7 +63,7 @@ export default function CategorySheet({ visible, selectedId, onSelect, onClose }
                 <View
                   style={[
                     styles.iconCircle,
-                    { borderColor: item.premium ? Colors.grayMid : item.color },
+                    { borderColor: item.premium ? colors.grayMid : item.color },
                     item.premium && styles.iconCircleLocked,
                   ]}
                 >
@@ -76,7 +78,7 @@ export default function CategorySheet({ visible, selectedId, onSelect, onClose }
                   )}
                 </View>
                 {item.premium ? (
-                  <Ionicons name="lock-closed" size={18} color={Colors.grayMid} />
+                  <Ionicons name="lock-closed" size={18} color={colors.grayMid} />
                 ) : isSelected ? (
                   <View style={styles.selectedDot} />
                 ) : (
@@ -91,13 +93,13 @@ export default function CategorySheet({ visible, selectedId, onSelect, onClose }
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles((colors) => ({
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.3)',
   },
   sheet: {
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
     borderTopLeftRadius: Radius.xl,
     borderTopRightRadius: Radius.xl,
     paddingBottom: 40,
@@ -107,7 +109,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 4,
     borderRadius: 2,
-    backgroundColor: Colors.grayMid,
+    backgroundColor: colors.grayMid,
     alignSelf: 'center',
     marginTop: 12,
     marginBottom: 8,
@@ -121,11 +123,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: Colors.black,
+    color: colors.black,
   },
   seeAll: {
     fontSize: 14,
-    color: Colors.grayDark,
+    color: colors.grayDark,
   },
   row: {
     flexDirection: 'row',
@@ -136,9 +138,9 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   rowSelected: {
-    backgroundColor: Colors.grayLight,
+    backgroundColor: colors.grayLight,
     borderWidth: 1.5,
-    borderColor: Colors.blue,
+    borderColor: colors.blue,
   },
   iconCircle: {
     width: 48,
@@ -148,10 +150,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: Spacing.md,
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
   },
   iconCircleLocked: {
-    backgroundColor: Colors.grayLight,
+    backgroundColor: colors.grayLight,
   },
   rowContent: {
     flex: 1,
@@ -159,21 +161,21 @@ const styles = StyleSheet.create({
   rowName: {
     fontSize: 17,
     fontWeight: '600',
-    color: Colors.black,
+    color: colors.black,
   },
   rowNameLocked: {
-    color: Colors.gray,
+    color: colors.gray,
   },
   premiumText: {
     fontSize: 12,
-    color: Colors.gray,
+    color: colors.gray,
     marginTop: 2,
   },
   selectedDot: {
     width: 22,
     height: 22,
     borderRadius: 11,
-    backgroundColor: Colors.blue,
+    backgroundColor: colors.blue,
     opacity: 0.3,
   },
   emptyDot: {
@@ -181,6 +183,6 @@ const styles = StyleSheet.create({
     height: 22,
     borderRadius: 11,
     borderWidth: 1.5,
-    borderColor: Colors.grayMid,
+    borderColor: colors.grayMid,
   },
-});
+}));

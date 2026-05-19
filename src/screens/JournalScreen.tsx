@@ -14,7 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Colors, Radius, Spacing } from '../theme';
+import { makeStyles, useTheme, Radius, Spacing } from '../theme';
 import { journalPrompts } from '../data/affirmations';
 import PremiumModal from '../components/PremiumModal';
 import { speak } from '../utils/speech';
@@ -34,6 +34,8 @@ function formatDate(d: Date) {
 }
 
 export default function JournalScreen() {
+  const styles = useStyles();
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [showPremium, setShowPremium] = useState(false);
@@ -120,7 +122,7 @@ export default function JournalScreen() {
             </TouchableOpacity>
             <TouchableOpacity onPress={spinRefresh} style={styles.refreshBtn}>
               <Animated.View style={{ transform: [{ rotate: spin }] }}>
-                <Ionicons name="sync-circle-outline" size={24} color={Colors.purple} />
+                <Ionicons name="sync-circle-outline" size={24} color={colors.purple} />
               </Animated.View>
             </TouchableOpacity>
           </ScrollView>
@@ -135,14 +137,14 @@ export default function JournalScreen() {
             style={styles.actionCard}
             onPress={() => speak(journalPrompts[promptIndex])}
           >
-            <Ionicons name="volume-medium-outline" size={20} color={Colors.blue} />
+            <Ionicons name="volume-medium-outline" size={20} color={colors.blue} />
             <Text style={styles.actionCardText}>Bugünkü{'\n'}Dinle</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.actionCard}
             onPress={() => navigation.navigate('JournalHistory')}
           >
-            <Ionicons name="book-outline" size={20} color={Colors.teal} />
+            <Ionicons name="book-outline" size={20} color={colors.teal} />
             <Text style={styles.actionCardText}>Geçmiş{'\n'}Kayıtlar</Text>
           </TouchableOpacity>
         </View>
@@ -153,7 +155,7 @@ export default function JournalScreen() {
             <View style={styles.reflectionDot} />
             <Text style={styles.sectionLabel}>YANSIMAN</Text>
             <TouchableOpacity style={styles.micBtn}>
-              <Ionicons name="mic-outline" size={22} color={Colors.gray} />
+              <Ionicons name="mic-outline" size={22} color={colors.gray} />
             </TouchableOpacity>
           </View>
           <TextInput
@@ -162,7 +164,7 @@ export default function JournalScreen() {
             value={reflection}
             onChangeText={saveReflection}
             placeholder="Yazmaya başla..."
-            placeholderTextColor={Colors.gray}
+            placeholderTextColor={colors.gray}
             textAlignVertical="top"
           />
           {!reflection && (
@@ -176,10 +178,10 @@ export default function JournalScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles((colors) => ({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
   },
   scroll: {
     padding: Spacing.md,
@@ -189,7 +191,7 @@ const styles = StyleSheet.create({
   premiumPill: {
     alignSelf: 'center',
     borderWidth: 1.5,
-    borderColor: Colors.purple,
+    borderColor: colors.purple,
     borderRadius: Radius.full,
     paddingHorizontal: 20,
     paddingVertical: 8,
@@ -198,10 +200,10 @@ const styles = StyleSheet.create({
   premiumPillText: {
     fontSize: 14,
     fontWeight: '600',
-    color: Colors.purple,
+    color: colors.purple,
   },
   card: {
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
     borderRadius: Radius.xl,
     padding: Spacing.lg,
     shadowColor: '#000',
@@ -220,18 +222,18 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: Colors.blue,
+    backgroundColor: colors.blue,
   },
   sectionLabel: {
     fontSize: 11,
     fontWeight: '700',
     letterSpacing: 1,
-    color: Colors.grayDark,
+    color: colors.grayDark,
     flex: 1,
   },
   dateText: {
     fontSize: 14,
-    color: Colors.gray,
+    color: colors.gray,
     marginBottom: Spacing.sm,
   },
   chipsScroll: {
@@ -242,21 +244,21 @@ const styles = StyleSheet.create({
     paddingRight: Spacing.sm,
   },
   chip: {
-    backgroundColor: Colors.grayLight,
+    backgroundColor: colors.grayLight,
     borderRadius: Radius.full,
     paddingHorizontal: 14,
     paddingVertical: 7,
   },
   chipActive: {
-    backgroundColor: Colors.grayMid,
+    backgroundColor: colors.grayMid,
   },
   chipText: {
     fontSize: 13,
     fontWeight: '600',
-    color: Colors.grayDark,
+    color: colors.grayDark,
   },
   chipTextActive: {
-    color: Colors.black,
+    color: colors.black,
   },
   refreshBtn: {
     justifyContent: 'center',
@@ -266,7 +268,7 @@ const styles = StyleSheet.create({
   promptText: {
     fontFamily: 'Georgia',
     fontSize: 26,
-    color: Colors.black,
+    color: colors.black,
     lineHeight: 36,
     marginTop: Spacing.sm,
   },
@@ -276,7 +278,7 @@ const styles = StyleSheet.create({
   },
   actionCard: {
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
     borderRadius: Radius.lg,
     padding: Spacing.md,
     gap: 8,
@@ -289,11 +291,11 @@ const styles = StyleSheet.create({
   actionCardText: {
     fontSize: 15,
     fontWeight: '700',
-    color: Colors.black,
+    color: colors.black,
     lineHeight: 20,
   },
   reflectionCard: {
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
     borderRadius: Radius.xl,
     padding: Spacing.lg,
     minHeight: 180,
@@ -313,22 +315,22 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: Colors.purple,
+    backgroundColor: colors.purple,
   },
   micBtn: {
     marginLeft: 'auto',
   },
   textInput: {
     fontSize: 16,
-    color: Colors.black,
+    color: colors.black,
     lineHeight: 24,
     minHeight: 100,
     fontFamily: 'Georgia',
   },
   hint: {
     fontSize: 14,
-    color: Colors.gray,
+    color: colors.gray,
     marginTop: 4,
     lineHeight: 20,
   },
-});
+}));

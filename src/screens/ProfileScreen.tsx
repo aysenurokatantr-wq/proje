@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   TouchableOpacity,
   Switch,
@@ -11,7 +10,8 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Colors, Radius, Spacing } from '../theme';
+import { makeStyles, useTheme, Radius, Spacing } from '../theme';
+import type { ThemeMode } from '../theme/ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   areNotificationsEnabled,
@@ -38,11 +38,37 @@ function getWeekDays() {
   });
 }
 
+function dateToStr(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function computeStreak(dates: string[]): number {
+  if (dates.length === 0) return 0;
+  const unique = [...new Set(dates)].sort().reverse();
+  let streak = 0;
+  let expected = dateToStr(new Date());
+  for (const d of unique) {
+    if (d === expected) {
+      streak++;
+      const prev = new Date(expected);
+      prev.setDate(prev.getDate() - 1);
+      expected = dateToStr(prev);
+    } else if (d < expected) {
+      break;
+    }
+  }
+  return streak;
+}
+
 export default function ProfileScreen() {
+  const styles = useStyles();
+  const { colors, mode, setMode } = useTheme();
   const insets = useSafeAreaInsets();
   const [hapticOn, setHapticOn] = useState(true);
   const [notifsOn, setNotifsOn] = useState(false);
   const [userName, setUserName] = useState('Sen');
+  const [streak, setStreak] = useState(0);
+  const [weekActivity, setWeekActivity] = useState<boolean[]>(Array(7).fill(false));
   const today = new Date();
   const weekDays = getWeekDays();
   const todayIndex = (today.getDay() + 6) % 7;
@@ -52,6 +78,20 @@ export default function ProfileScreen() {
     AsyncStorage.getItem('user_name').then((val) => {
       if (val) setUserName(val);
     });
+
+    const setup = async () => {
+      const raw = await AsyncStorage.getItem('activity_dates');
+      const dates: string[] = raw ? JSON.parse(raw) : [];
+      const todayKey = dateToStr(new Date());
+      if (!dates.includes(todayKey)) {
+        dates.push(todayKey);
+        await AsyncStorage.setItem('activity_dates', JSON.stringify(dates));
+      }
+      setStreak(computeStreak(dates));
+      const week = getWeekDays().map((d) => dates.includes(dateToStr(d)));
+      setWeekActivity(week);
+    };
+    setup();
   }, []);
 
   const toggleNotifications = async () => {
@@ -70,7 +110,7 @@ export default function ProfileScreen() {
     }
     await scheduleDailyAffirmation(9, 0);
     setNotifsOn(true);
-    Alert.alert('Bildirimler açıldı', 'Her gün saat 09:00\'da olumlama hatırlatıcısı alacaksın.');
+    Alert.alert('Bildirimler açıldı', "Her gün saat 09:00'da olumlama hatırlatıcısı alacaksın.");
   };
 
   const infoItems = [
@@ -78,6 +118,12 @@ export default function ProfileScreen() {
     { icon: 'star-outline', label: 'Uygulamayı Puanla', chevron: false },
     { icon: 'help-circle-outline', label: 'SSS', chevron: true },
     { icon: 'mail-outline', label: 'Destek ile İletişim', chevron: false },
+  ];
+
+  const themeModes: { id: ThemeMode; label: string }[] = [
+    { id: 'system', label: 'Sistem' },
+    { id: 'light', label: 'Açık' },
+    { id: 'dark', label: 'Koyu' },
   ];
 
   return (
@@ -118,7 +164,7 @@ export default function ProfileScreen() {
               {TURKISH_MONTHS[today.getMonth()]}
             </Text>
             <Text style={styles.yearStreakText}>
-              {today.getFullYear()} • 1 gün
+              {today.getFullYear()} • {streak} gün
             </Text>
           </View>
           <TouchableOpacity style={styles.showMonthBtn}>
@@ -129,11 +175,11 @@ export default function ProfileScreen() {
         {/* Legend */}
         <View style={styles.legend}>
           <View style={styles.legendItem}>
-            <View style={[styles.legendDot, { backgroundColor: Colors.purple }]} />
+            <View style={[styles.legendDot, { backgroundColor: colors.purple }]} />
             <Text style={styles.legendText}>Olumlamalar</Text>
           </View>
           <View style={styles.legendItem}>
-            <View style={[styles.legendDot, { backgroundColor: Colors.blue }]} />
+            <View style={[styles.legendDot, { backgroundColor: colors.blue }]} />
             <Text style={styles.legendText}>Günlük</Text>
           </View>
         </View>
@@ -153,7 +199,8 @@ export default function ProfileScreen() {
                 key={i}
                 style={[
                   styles.dot,
-                  i === todayIndex && styles.dotFilledPurple,
+                  weekActivity[i] && styles.dotFilledPurple,
+                  i === todayIndex && !weekActivity[i] && styles.dotToday,
                 ]}
               />
             ))}
@@ -171,7 +218,7 @@ export default function ProfileScreen() {
       <TouchableOpacity style={styles.card} onPress={toggleNotifications}>
         <View style={styles.notifRow}>
           <View style={styles.notifIconWrap}>
-            <Ionicons name="notifications" size={24} color={Colors.blue} />
+            <Ionicons name="notifications" size={24} color={colors.blue} />
           </View>
           <View style={styles.notifContent}>
             <Text style={styles.notifTitle}>Bildirimler</Text>
@@ -183,9 +230,9 @@ export default function ProfileScreen() {
             <Ionicons
               name={notifsOn ? 'notifications' : 'notifications-off-outline'}
               size={18}
-              color={notifsOn ? Colors.green : Colors.gray}
+              color={notifsOn ? colors.green : colors.gray}
             />
-            <Ionicons name="chevron-forward" size={16} color={Colors.gray} />
+            <Ionicons name="chevron-forward" size={16} color={colors.gray} />
           </View>
         </View>
       </TouchableOpacity>
@@ -193,9 +240,9 @@ export default function ProfileScreen() {
       {/* Update Focus */}
       <TouchableOpacity style={styles.card}>
         <View style={styles.updateFocusHeader}>
-          <Ionicons name="sparkles" size={18} color={Colors.purple} />
+          <Ionicons name="sparkles" size={18} color={colors.purple} />
           <Text style={styles.updateFocusTitle}>Odağı Güncelle</Text>
-          <Ionicons name="chevron-forward" size={16} color={Colors.gray} style={{ marginLeft: 'auto' }} />
+          <Ionicons name="chevron-forward" size={16} color={colors.gray} style={{ marginLeft: 'auto' }} />
         </View>
         <View style={styles.divider} />
         <Text style={styles.updateFocusDesc}>
@@ -208,10 +255,19 @@ export default function ProfileScreen() {
       <View style={styles.card}>
         <View style={styles.settingsRow}>
           <Text style={styles.settingsLabel}>Renk Şeması</Text>
-          <View style={styles.settingsRight}>
-            <Ionicons name="phone-portrait-outline" size={16} color={Colors.gray} />
-            <Text style={styles.settingsValue}>Sistem</Text>
-          </View>
+        </View>
+        <View style={styles.themeRow}>
+          {themeModes.map((tm) => (
+            <TouchableOpacity
+              key={tm.id}
+              style={[styles.themeBtn, mode === tm.id && styles.themeBtnActive]}
+              onPress={() => setMode(tm.id)}
+            >
+              <Text style={[styles.themeBtnText, mode === tm.id && styles.themeBtnTextActive]}>
+                {tm.label}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
         <View style={styles.divider} />
         <View style={styles.settingsRow}>
@@ -219,8 +275,8 @@ export default function ProfileScreen() {
           <Switch
             value={hapticOn}
             onValueChange={setHapticOn}
-            trackColor={{ false: Colors.grayMid, true: Colors.green }}
-            thumbColor={Colors.white}
+            trackColor={{ false: colors.grayMid, true: colors.green }}
+            thumbColor={colors.white}
           />
         </View>
       </View>
@@ -231,13 +287,13 @@ export default function ProfileScreen() {
         {infoItems.map((item, i) => (
           <React.Fragment key={i}>
             <TouchableOpacity style={styles.infoRow}>
-              <Ionicons name={item.icon as any} size={22} color={Colors.black} />
+              <Ionicons name={item.icon as any} size={22} color={colors.black} />
               <Text style={styles.infoLabel}>{item.label}</Text>
               {item.chevron && (
                 <Ionicons
                   name="chevron-forward"
                   size={16}
-                  color={Colors.gray}
+                  color={colors.gray}
                   style={{ marginLeft: 'auto' }}
                 />
               )}
@@ -250,7 +306,7 @@ export default function ProfileScreen() {
       {/* Profile footer */}
       <View style={styles.profileFooter}>
         <View style={styles.avatarCircle}>
-          <Ionicons name="person" size={28} color={Colors.purple} />
+          <Ionicons name="person" size={28} color={colors.purple} />
         </View>
         <View>
           <Text style={styles.profileFieldLabel}>İsim</Text>
@@ -261,10 +317,10 @@ export default function ProfileScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles((colors) => ({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
   },
   content: {
     padding: Spacing.md,
@@ -283,15 +339,15 @@ const styles = StyleSheet.create({
   bannerCount: {
     fontSize: 28,
     fontWeight: '900',
-    color: Colors.black,
+    color: '#1A1A1A',
   },
   bannerSubtext: {
     fontSize: 14,
-    color: Colors.grayDark,
+    color: '#6B7280',
   },
   stars: {
     fontSize: 22,
-    color: Colors.gold,
+    color: colors.gold,
     letterSpacing: 2,
   },
   unlockBtn: {
@@ -302,10 +358,10 @@ const styles = StyleSheet.create({
   unlockBtnText: {
     fontSize: 16,
     fontWeight: '700',
-    color: Colors.white,
+    color: '#FFFFFF',
   },
   card: {
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
     borderRadius: Radius.xl,
     padding: Spacing.md,
     shadowColor: '#000',
@@ -323,15 +379,15 @@ const styles = StyleSheet.create({
   monthText: {
     fontSize: 22,
     fontWeight: '800',
-    color: Colors.black,
+    color: colors.black,
   },
   yearStreakText: {
     fontSize: 13,
-    color: Colors.gray,
+    color: colors.gray,
     marginTop: 2,
   },
   showMonthBtn: {
-    backgroundColor: Colors.grayLight,
+    backgroundColor: colors.grayLight,
     borderRadius: Radius.full,
     paddingHorizontal: 14,
     paddingVertical: 7,
@@ -339,7 +395,7 @@ const styles = StyleSheet.create({
   showMonthText: {
     fontSize: 13,
     fontWeight: '600',
-    color: Colors.black,
+    color: colors.black,
   },
   legend: {
     flexDirection: 'row',
@@ -358,17 +414,17 @@ const styles = StyleSheet.create({
   },
   legendText: {
     fontSize: 13,
-    color: Colors.grayDark,
+    color: colors.grayDark,
   },
   weekCard: {
-    backgroundColor: Colors.grayLight,
+    backgroundColor: colors.grayLight,
     borderRadius: Radius.lg,
     padding: Spacing.md,
   },
   weekLabel: {
     fontSize: 15,
     fontWeight: '700',
-    color: Colors.black,
+    color: colors.black,
     marginBottom: Spacing.sm,
   },
   weekRow: {
@@ -381,17 +437,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,
     fontWeight: '600',
-    color: Colors.grayDark,
+    color: colors.grayDark,
   },
   dot: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: Colors.grayMid,
+    backgroundColor: colors.grayMid,
     alignSelf: 'center',
   },
   dotFilledPurple: {
-    backgroundColor: Colors.purple,
+    backgroundColor: colors.purple,
+  },
+  dotToday: {
+    borderWidth: 2,
+    borderColor: colors.purple,
+    backgroundColor: colors.grayMid,
   },
   notifRow: {
     flexDirection: 'row',
@@ -402,7 +463,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.grayLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -412,11 +473,11 @@ const styles = StyleSheet.create({
   notifTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: Colors.black,
+    color: colors.black,
   },
   notifSubtitle: {
     fontSize: 13,
-    color: Colors.gray,
+    color: colors.gray,
     marginTop: 2,
   },
   notifRight: {
@@ -433,17 +494,17 @@ const styles = StyleSheet.create({
   updateFocusTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: Colors.purple,
+    color: colors.purple,
   },
   updateFocusDesc: {
     fontSize: 13,
-    color: Colors.grayDark,
+    color: colors.grayDark,
     lineHeight: 20,
     marginTop: Spacing.sm,
   },
   divider: {
     height: 1,
-    backgroundColor: Colors.grayLight,
+    backgroundColor: colors.grayLight,
     marginVertical: Spacing.sm,
   },
   settingsRow: {
@@ -455,21 +516,36 @@ const styles = StyleSheet.create({
   settingsLabel: {
     fontSize: 16,
     fontWeight: '500',
-    color: Colors.black,
+    color: colors.black,
   },
-  settingsRight: {
+  themeRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
+    gap: 8,
+    marginTop: 8,
+    marginBottom: 4,
   },
-  settingsValue: {
-    fontSize: 14,
-    color: Colors.gray,
+  themeBtn: {
+    flex: 1,
+    paddingVertical: 8,
+    borderRadius: Radius.full,
+    backgroundColor: colors.grayLight,
+    alignItems: 'center',
+  },
+  themeBtnActive: {
+    backgroundColor: colors.primary,
+  },
+  themeBtnText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: colors.grayDark,
+  },
+  themeBtnTextActive: {
+    color: colors.white,
   },
   sectionHeader: {
     fontSize: 13,
     fontWeight: '600',
-    color: Colors.grayDark,
+    color: colors.grayDark,
     paddingHorizontal: 4,
     marginBottom: -4,
   },
@@ -482,7 +558,7 @@ const styles = StyleSheet.create({
   infoLabel: {
     fontSize: 16,
     fontWeight: '500',
-    color: Colors.black,
+    color: colors.black,
     flex: 1,
   },
   profileFooter: {
@@ -495,20 +571,20 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: Colors.purplePale,
+    backgroundColor: colors.purplePale,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: Colors.purpleLight,
+    borderColor: colors.purpleLight,
   },
   profileFieldLabel: {
     fontSize: 12,
-    color: Colors.gray,
+    color: colors.gray,
     marginBottom: 2,
   },
   profileName: {
     fontSize: 18,
     fontWeight: '700',
-    color: Colors.black,
+    color: colors.black,
   },
-});
+}));

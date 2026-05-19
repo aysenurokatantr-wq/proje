@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   TextInput,
   TouchableOpacity,
   ScrollView,
@@ -13,7 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Colors, Radius, Spacing } from '../theme';
+import { makeStyles, useTheme, Radius, Spacing } from '../theme';
 
 type Props = {
   onDone: () => void;
@@ -29,6 +28,8 @@ const FOCUS_OPTIONS = [
 ];
 
 export default function OnboardingScreen({ onDone }: Props) {
+  const styles = useStyles();
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const [step, setStep] = useState<0 | 1 | 2>(0);
   const [name, setName] = useState('');
@@ -44,7 +45,7 @@ export default function OnboardingScreen({ onDone }: Props) {
   };
 
   const renderIcon = (option: typeof FOCUS_OPTIONS[0], active: boolean) => {
-    const color = active ? Colors.white : option.color;
+    const color = active ? '#FFFFFF' : option.color;
     const size = 24;
     if (option.iconLib === 'MaterialCommunityIcons') {
       return <MaterialCommunityIcons name={option.icon as any} size={size} color={color} />;
@@ -74,7 +75,7 @@ export default function OnboardingScreen({ onDone }: Props) {
         {step === 0 && (
           <View style={styles.stepContent}>
             <View style={styles.heartWrap}>
-              <Ionicons name="heart" size={56} color={Colors.primary} />
+              <Ionicons name="heart" size={56} color={colors.primary} />
             </View>
             <Text style={styles.welcomeTitle}>Hoş Geldin</Text>
             <Text style={styles.welcomeDesc}>
@@ -83,13 +84,13 @@ export default function OnboardingScreen({ onDone }: Props) {
             </Text>
             <TouchableOpacity style={styles.cta} onPress={() => setStep(1)}>
               <LinearGradient
-                colors={[Colors.primary, '#FF7090']}
+                colors={[colors.primary, '#FF7090']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.ctaGradient}
               >
                 <Text style={styles.ctaText}>Başla</Text>
-                <Ionicons name="arrow-forward" size={20} color={Colors.white} />
+                <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
               </LinearGradient>
             </TouchableOpacity>
           </View>
@@ -106,7 +107,7 @@ export default function OnboardingScreen({ onDone }: Props) {
               value={name}
               onChangeText={setName}
               placeholder="Adın..."
-              placeholderTextColor={Colors.gray}
+              placeholderTextColor={colors.gray}
               autoFocus
               maxLength={30}
             />
@@ -116,13 +117,13 @@ export default function OnboardingScreen({ onDone }: Props) {
               onPress={() => setStep(2)}
             >
               <LinearGradient
-                colors={[Colors.primary, '#FF7090']}
+                colors={[colors.primary, '#FF7090']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.ctaGradient}
               >
                 <Text style={styles.ctaText}>Devam</Text>
-                <Ionicons name="arrow-forward" size={20} color={Colors.white} />
+                <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
               </LinearGradient>
             </TouchableOpacity>
           </View>
@@ -163,13 +164,13 @@ export default function OnboardingScreen({ onDone }: Props) {
               onPress={finish}
             >
               <LinearGradient
-                colors={[Colors.primary, '#FF7090']}
+                colors={[colors.primary, '#FF7090']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.ctaGradient}
               >
                 <Text style={styles.ctaText}>Yolculuğa Başla</Text>
-                <Ionicons name="sparkles" size={20} color={Colors.white} />
+                <Ionicons name="sparkles" size={20} color="#FFFFFF" />
               </LinearGradient>
             </TouchableOpacity>
           </ScrollView>
@@ -179,10 +180,10 @@ export default function OnboardingScreen({ onDone }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles((colors) => ({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
   },
   inner: {
     flex: 1,
@@ -198,10 +199,10 @@ const styles = StyleSheet.create({
     width: 24,
     height: 6,
     borderRadius: 3,
-    backgroundColor: Colors.grayMid,
+    backgroundColor: colors.grayMid,
   },
   dotActive: {
-    backgroundColor: Colors.primary,
+    backgroundColor: colors.primary,
   },
   stepContent: {
     flex: 1,
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: colors.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: Spacing.md,
@@ -225,12 +226,12 @@ const styles = StyleSheet.create({
   welcomeTitle: {
     fontFamily: 'Georgia',
     fontSize: 36,
-    color: Colors.black,
+    color: colors.black,
     textAlign: 'center',
   },
   welcomeDesc: {
     fontSize: 16,
-    color: Colors.grayDark,
+    color: colors.grayDark,
     textAlign: 'center',
     lineHeight: 24,
     marginBottom: Spacing.lg,
@@ -239,13 +240,13 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Georgia',
     fontSize: 28,
-    color: Colors.black,
+    color: colors.black,
     textAlign: 'center',
     marginTop: Spacing.lg,
   },
   subtitle: {
     fontSize: 15,
-    color: Colors.grayDark,
+    color: colors.grayDark,
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: Spacing.lg,
@@ -253,12 +254,12 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
     borderRadius: Radius.lg,
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
     fontSize: 18,
-    color: Colors.black,
+    color: colors.black,
     fontFamily: 'Georgia',
     marginBottom: Spacing.xl,
     shadowColor: '#000',
@@ -276,9 +277,9 @@ const styles = StyleSheet.create({
   focusBtn: {
     flexBasis: '47%',
     flexGrow: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
     borderWidth: 2,
-    borderColor: Colors.grayMid,
+    borderColor: colors.grayMid,
     borderRadius: Radius.lg,
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.sm,
@@ -289,10 +290,10 @@ const styles = StyleSheet.create({
   focusBtnText: {
     fontSize: 15,
     fontWeight: '600',
-    color: Colors.black,
+    color: colors.black,
   },
   focusBtnTextActive: {
-    color: Colors.white,
+    color: '#FFFFFF',
   },
   cta: {
     alignSelf: 'stretch',
@@ -312,6 +313,6 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 17,
     fontWeight: '700',
-    color: Colors.white,
+    color: '#FFFFFF',
   },
-});
+}));

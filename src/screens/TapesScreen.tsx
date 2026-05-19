@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Colors, Radius, Spacing } from '../theme';
+import { makeStyles, useTheme, Radius, Spacing } from '../theme';
 import { categories } from '../data/affirmations';
 import AmbientAudioModal from '../components/AmbientAudioModal';
 import { speak, stop as stopSpeech } from '../utils/speech';
@@ -17,6 +16,8 @@ import { speak, stop as stopSpeech } from '../utils/speech';
 const selfLoveAffirmations = categories[0].affirmations;
 
 export default function TapesScreen() {
+  const styles = useStyles();
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<'pack' | 'favorites'>('pack');
   const [isPlaying, setIsPlaying] = useState(false);
@@ -71,7 +72,7 @@ export default function TapesScreen() {
           <Ionicons
             name="musical-notes"
             size={16}
-            color={activeTab === 'pack' ? Colors.white : Colors.black}
+            color={activeTab === 'pack' ? colors.white : colors.black}
           />
           <Text style={[styles.tabText, activeTab === 'pack' && styles.tabTextActive]}>
             Paket
@@ -84,7 +85,7 @@ export default function TapesScreen() {
           <Ionicons
             name="heart"
             size={16}
-            color={activeTab === 'favorites' ? Colors.white : Colors.black}
+            color={activeTab === 'favorites' ? colors.white : colors.black}
           />
           <Text style={[styles.tabText, activeTab === 'favorites' && styles.tabTextActive]}>
             Favoriler
@@ -101,7 +102,7 @@ export default function TapesScreen() {
 
       {/* Play All */}
       <TouchableOpacity style={styles.playAllBtn} onPress={handlePlayToggle}>
-        <Ionicons name={isPlaying ? 'pause' : 'play'} size={18} color={Colors.white} />
+        <Ionicons name={isPlaying ? 'pause' : 'play'} size={18} color={colors.white} />
         <Text style={styles.playAllText}>{isPlaying ? 'Duraklat' : 'Hepsini Çal'}</Text>
       </TouchableOpacity>
 
@@ -113,7 +114,7 @@ export default function TapesScreen() {
       >
         {displayList.length === 0 ? (
           <View style={styles.emptyState}>
-            <Ionicons name="heart-outline" size={40} color={Colors.grayMid} />
+            <Ionicons name="heart-outline" size={40} color={colors.grayMid} />
             <Text style={styles.emptyText}>Henüz favori yok</Text>
             <Text style={styles.emptyHint}>
               Burada saklamak için olumlama kartlarındaki kalp simgesine dokun.
@@ -134,7 +135,7 @@ export default function TapesScreen() {
                 <Ionicons
                   name="volume-high"
                   size={18}
-                  color={Colors.primary}
+                  color={colors.primary}
                   style={styles.playingIcon}
                 />
               )}
@@ -150,7 +151,7 @@ export default function TapesScreen() {
             {displayList[currentIndex] || selfLoveAffirmations[0]}
           </Text>
           <TouchableOpacity onPress={() => { stopSpeech(); setIsPlaying(false); }}>
-            <Ionicons name="pause-circle" size={28} color={Colors.primary} />
+            <Ionicons name="pause-circle" size={28} color={colors.primary} />
           </TouchableOpacity>
         </View>
       )}
@@ -160,7 +161,7 @@ export default function TapesScreen() {
         style={[styles.fab, isPlaying && styles.fabUp]}
         onPress={() => setShowAmbient(true)}
       >
-        <Ionicons name="volume-high" size={22} color={Colors.primary} />
+        <Ionicons name="volume-high" size={22} color={colors.primary} />
       </TouchableOpacity>
 
       <AmbientAudioModal visible={showAmbient} onClose={() => setShowAmbient(false)} />
@@ -168,10 +169,10 @@ export default function TapesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles((colors) => ({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
   },
   header: {
     paddingHorizontal: Spacing.lg,
@@ -182,12 +183,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '800',
-    color: Colors.black,
+    color: colors.black,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 14,
-    color: Colors.grayDark,
+    color: colors.grayDark,
     marginTop: 4,
     textAlign: 'center',
   },
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 10,
     borderRadius: Radius.full,
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
@@ -212,18 +213,18 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   tabActive: {
-    backgroundColor: Colors.primary,
+    backgroundColor: colors.primary,
   },
   tabText: {
     fontSize: 14,
     fontWeight: '700',
-    color: Colors.black,
+    color: colors.black,
   },
   tabTextActive: {
-    color: Colors.white,
+    color: colors.white,
   },
   badge: {
-    backgroundColor: Colors.grayMid,
+    backgroundColor: colors.grayMid,
     borderRadius: Radius.full,
     minWidth: 20,
     height: 20,
@@ -237,22 +238,22 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: Colors.grayDark,
+    color: colors.grayDark,
   },
   badgeTextActive: {
-    color: Colors.white,
+    color: colors.white,
   },
   playAllBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: Colors.primary,
+    backgroundColor: colors.primary,
     marginHorizontal: Spacing.lg,
     borderRadius: Radius.full,
     paddingVertical: 14,
     marginBottom: Spacing.md,
-    shadowColor: Colors.primary,
+    shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
   playAllText: {
     fontSize: 16,
     fontWeight: '700',
-    color: Colors.white,
+    color: colors.white,
   },
   list: {
     flex: 1,
@@ -272,7 +273,7 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   affirmationCard: {
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
     borderRadius: Radius.xl,
     padding: Spacing.xl,
     shadowColor: '#000',
@@ -283,13 +284,13 @@ const styles = StyleSheet.create({
   },
   affirmationCardActive: {
     borderWidth: 2,
-    borderColor: Colors.primary,
-    backgroundColor: Colors.primaryLight,
+    borderColor: colors.primary,
+    backgroundColor: colors.primaryLight,
   },
   affirmationText: {
     fontFamily: 'Georgia',
     fontSize: 22,
-    color: Colors.black,
+    color: colors.black,
     textAlign: 'center',
     lineHeight: 32,
   },
@@ -305,11 +306,11 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 18,
     fontWeight: '700',
-    color: Colors.grayDark,
+    color: colors.grayDark,
   },
   emptyHint: {
     fontSize: 14,
-    color: Colors.gray,
+    color: colors.gray,
     textAlign: 'center',
     lineHeight: 20,
     paddingHorizontal: Spacing.xl,
@@ -319,7 +320,7 @@ const styles = StyleSheet.create({
     bottom: 90,
     left: Spacing.lg,
     right: 80,
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
     borderRadius: Radius.lg,
     flexDirection: 'row',
     alignItems: 'center',
@@ -335,7 +336,7 @@ const styles = StyleSheet.create({
   miniPlayerText: {
     flex: 1,
     fontSize: 13,
-    color: Colors.black,
+    color: colors.black,
     fontStyle: 'italic',
   },
   fab: {
@@ -345,7 +346,7 @@ const styles = StyleSheet.create({
     width: 54,
     height: 54,
     borderRadius: 27,
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: colors.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
@@ -357,4 +358,4 @@ const styles = StyleSheet.create({
   fabUp: {
     bottom: 100,
   },
-});
+}));
